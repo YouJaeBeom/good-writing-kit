@@ -1,0 +1,24 @@
+{
+  "name": "writing-guard",
+  "version": "1.0.0",
+  "description": "문서와 채팅 답변의 AI 말투·약어·용어를 점검하는 훅, 용어 통일(term-unify)·설명 기준(clear-explain) 스킬",
+  "author": {
+    "name": "YouJaeBeom",
+    "url": "https://github.com/YouJaeBeom"
+  },
+  "homepage": "https://github.com/YouJaeBeom/good-writing-kit",
+  "repository": "https://github.com/YouJaeBeom/good-writing-kit",
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "korean",
+    "humanize",
+    "terminology",
+    "glossary",
+    "hooks"
+  ],
+  "skills": [
+    "./skills/term-unify",
+    "./skills/clear-explain"
+  ]
+}

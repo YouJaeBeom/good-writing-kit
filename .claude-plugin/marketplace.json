@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "good-writing-kit",
+  "owner": {
+    "name": "YouJaeBeom",
+    "url": "https://github.com/YouJaeBeom"
+  },
+  "metadata": {
+    "description": "AI 말투 제거, 용어 통일, 알기 쉬운 설명을 Claude Code에 적용하는 플러그인 묶음",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "writing-guard",
+      "source": "./plugins/writing-guard",
+      "version": "1.0.0",
+      "description": "문서와 채팅 답변의 AI 말투·약어·용어를 점검하는 훅, 용어 통일(term-unify)·설명 기준(clear-explain) 스킬"
+    },
+    {
+      "name": "humanize-korean",
+      "source": {
+        "source": "github",
+        "repo": "epoko77-ai/im-not-ai"
+      },
+      "description": "im-not-ai: AI가 쓴 한글을 사람이 쓴 글처럼 윤문 (epoko77-ai, MIT)"
+    },
+    {
+      "name": "humanizer",
+      "source": {
+        "source": "github",
+        "repo": "blader/humanizer"
+      },
+      "description": "Humanizer: 영문 AI 말투 윤문 (blader, MIT)"
+    }
+  ]
+}
