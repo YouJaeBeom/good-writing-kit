@@ -32,22 +32,8 @@ else
   claude plugin marketplace add "$REPO"
 fi
 
-# 2. 플러그인 설치. 같은 이름의 플러그인이 다른 마켓플레이스에서 이미 설치돼 있으면 건너뛴다
-installed_from() { claude plugin list 2>/dev/null | grep -oE "$1@[A-Za-z0-9._-]+" | head -n 1 || true; }
-for plugin in writing-guard humanize-korean humanizer; do
-  current="$(installed_from "$plugin")"
-  if [ "$current" = "$plugin@$MARKET" ]; then
-    say "업데이트: $current"
-    claude plugin update "$current"
-  elif [ -n "$current" ]; then
-    say "이미 설치됨: $current (그대로 둡니다)"
-  else
-    say "설치: $plugin@$MARKET"
-    claude plugin install "$plugin@$MARKET"
-  fi
-done
-
-# 3. 예전 수동 설치본 정리 (없으면 아무것도 하지 않는다)
+# 2. 예전 수동 설치본 정리 (없으면 아무것도 하지 않는다). 플러그인 설치보다 먼저 해야
+#    수동 설치본을 '이미 설치됨'으로 잘못 보고 건너뛰는 일이 없다
 move_old() {
   local target="$1"
   [ -e "$target" ] || [ -L "$target" ] || return 0
@@ -93,6 +79,22 @@ if changed:
     settings.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print("[good-writing-kit] settings.json에서 예전 writing-guard 훅을 뺐습니다 (원본은 백업 폴더).")
 PY
+
+# 3. 플러그인 설치. 같은 이름의 플러그인이 다른 마켓플레이스에서 이미 설치돼 있으면 건너뛴다
+# ~/.claude/skills에 직접 넣은 스킬은 목록에 "이름@skills-dir"로 보이지만 플러그인이 아니므로 뺀다
+installed_from() { claude plugin list 2>/dev/null | grep -oE "$1@[A-Za-z0-9._-]+" | grep -v "@skills-dir$" | head -n 1 || true; }
+for plugin in writing-guard humanize-korean humanizer; do
+  current="$(installed_from "$plugin")"
+  if [ "$current" = "$plugin@$MARKET" ]; then
+    say "업데이트: $current"
+    claude plugin update "$current"
+  elif [ -n "$current" ]; then
+    say "이미 설치됨: $current (그대로 둡니다)"
+  else
+    say "설치: $plugin@$MARKET"
+    claude plugin install "$plugin@$MARKET"
+  fi
+done
 
 # 4. 약어 점검에서 뺄 이름 목록. 프로젝트·학회 이름을 공백으로 나열한다 (서버마다 따로 관리)
 KNOWN="$CLAUDE_HOME/writing-guard-known-terms.txt"
